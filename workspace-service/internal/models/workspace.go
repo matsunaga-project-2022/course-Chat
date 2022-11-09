@@ -1,4 +1,11 @@
-package valueobject
+package models
+
+type Workspace struct {
+	ID      WorkspaceID
+	Name    string
+	OwnerID string
+	Icon    string
+}
 
 type WorkspaceID string
 

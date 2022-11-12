@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"github.com/go-redis/redis/v9"
+	"sync"
 	"time"
 )
 
@@ -24,6 +25,7 @@ type IMessageEventer interface {
 // MessageEventer is the implementation of IMessageEventer by using Redis Client
 type MessageEventer struct {
 	manager *redis.Client
+	mutex   sync.Mutex
 }
 
 // NewMessageEventer is the constructor that generate new MessageEventer instance
@@ -32,7 +34,7 @@ func NewMessageEventer(manager *redis.Client) *MessageEventer {
 }
 
 // Subscribe is the method of MessageEventer that subscribe message
-func (m MessageEventer) Subscribe(ctx context.Context, subID string, messages chan<- Message, errors chan<- error) {
+func (m *MessageEventer) Subscribe(ctx context.Context, subID string, messages chan<- Message, errors chan<- error) {
 	subscribe := m.manager.Subscribe(ctx, subID)
 
 	ch := subscribe.Channel()
@@ -41,12 +43,15 @@ func (m MessageEventer) Subscribe(ctx context.Context, subID string, messages ch
 		if err := json.Unmarshal([]byte(subscription.Payload), &message); err != nil {
 			errors <- err
 		}
+
+		m.mutex.Lock()
 		messages <- message
+		m.mutex.Unlock()
 	}
 }
 
 // Publish is the method of MessageEventer that publish message
-func (m MessageEventer) Publish(message Message) error {
+func (m *MessageEventer) Publish(message Message) error {
 	//TODO implement me
 	panic("implement me")
 }

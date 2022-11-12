@@ -1,7 +1,10 @@
 package models
 
-import "time"
+import (
+	"time"
+)
 
+// Message is a data model of chat message
 type Message struct {
 	ID        string    `db:"id"`
 	UserID    string    `db:"user_id"`

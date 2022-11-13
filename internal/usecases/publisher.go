@@ -21,7 +21,7 @@ type MessagePublisher struct {
 
 // NewMessagePublisher is the constructor that generate new MessagePublisher instance
 func NewMessagePublisher(manager *redis.Client) *MessagePublisher {
-	return &MessagePublisher{manager: manager}
+	return &MessagePublisher{manager: manager, mutex: sync.Mutex{}}
 }
 
 // Publish is the method of MessagePublisher that subscribe message

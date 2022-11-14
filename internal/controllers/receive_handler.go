@@ -17,10 +17,13 @@ func NewReceiveHandler(receiver usecases.IMessageReceiver) *ReceiveHandler {
 
 func (rh *ReceiveHandler) Receive() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		userID := c.Get("user_id")
+		userID := c.FormValue("user_id")
 		text := c.FormValue("text")
+		if userID == "" || text == "" {
+			return c.NoContent(http.StatusBadRequest)
+		}
 
-		err := rh.receiver.Receive(c.Request().Context(), "", userID.(string), text)
+		err := rh.receiver.Receive(c.Request().Context(), "", userID, text)
 
 		if err != nil {
 			log.Println(err)

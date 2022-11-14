@@ -21,7 +21,7 @@ func NewMessageReceiver(redisClient *redis.Client) *MessageReceiver {
 	return &MessageReceiver{redisClient: redisClient}
 }
 
-func (r *MessageReceiver) Receive(ctx context.Context, userID string, text string) error {
+func (r *MessageReceiver) Receive(ctx context.Context, channel string, userID string, text string) error {
 	id := uuid.New()
 	structMessage := &models.Message{
 		ID:        id.String(),

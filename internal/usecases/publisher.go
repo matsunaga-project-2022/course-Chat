@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"github.com/go-redis/redis/v9"
 	"github.com/matsunaga-project-2022/course/chat/internal/models"
+	"log"
 	"sync"
 )
 
@@ -35,6 +36,7 @@ func (m *MessagePublisher) Publish(ctx context.Context, subID string, messages c
 			errors <- err
 		}
 
+		log.Println(message)
 		m.mutex.Lock()
 		messages <- message
 		m.mutex.Unlock()

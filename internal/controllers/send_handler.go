@@ -22,10 +22,10 @@ func (sh *SendHandler) Send(c echo.Context) error {
 			defer ws.Close()
 
 			// 初回のメッセージを送信
-			err := websocket.Message.Send(ws, "Server: Hello, Client!")
-			if err != nil {
-				c.Logger().Error(err)
-			}
+			//err := websocket.Message.Send(ws, "Server: Hello, Client!")
+			//if err != nil {
+			//	c.Logger().Error(err)
+			//}
 
 			for {
 				// Client からのメッセージを読み込む
@@ -35,7 +35,7 @@ func (sh *SendHandler) Send(c echo.Context) error {
 					c.Logger().Error(err)
 				}
 				// Client からのメッセージを元に返すメッセージを作成し送信する
-				err = websocket.Message.Send(ws, payload)
+				err = websocket.JSON.Send(ws, payload)
 				if err != nil {
 					c.Logger().Error(err)
 				}

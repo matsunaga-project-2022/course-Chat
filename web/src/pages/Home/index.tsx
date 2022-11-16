@@ -1,43 +1,45 @@
-import React from 'react';
-import {
-  Avatar,
-  Box,
-  Card,
-  CardActions,
-  CardContent,
-  CardHeader,
-  CardMedia,
-  IconButton,
-  List,
-  ListItem,
-  ListItemText,
-  Typography,
-} from '@mui/material';
+import React, { useState } from 'react';
+import { Box } from '@mui/material';
 import { grey, red } from '@mui/material/colors';
+import { MessageCard, MessageCardProps } from '../../components/Card/index';
 
-const Home: React.FC = () => (
-  <Box
-    sx={{
-      marginTop: '60px',
-    }}
-  >
-    <Card sx={{ width: '100%' }} elevation={0}>
-      <CardHeader
-        avatar={
-          <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-            F
-          </Avatar>
-        }
-        title="世界の歌姫 ウタ"
-        subheader="16:00"
-      />
-      <CardContent>
-        <Typography variant="body2" color="text.secondary">
-          でもだからこそ、正解がないことにより広がる無限の荒野、そこを冒険して自分なりのアプローチをしていく世界観が非常に面白い。そんな無限大の可能性を秘めた領域の中で、貴方はプロダクトの価値を高めるという目的のもと旅を続ける。「そんなことする意味なんてあるの？」なんて言う外野からの罵倒という名の隕石を浴びながら、果てなき道を歩き続ける。歩く先は闇か、炎上か、それとも光り輝く鉱石(功績)か。ようこそ、アーキテクトの世界へ。
-        </Typography>
-      </CardContent>
-    </Card>
-  </Box>
-);
+const Home: React.FC = () => {
+  const [messages, setMessages] = useState<Array<MessageCardProps>>([]);
+  const socket = new WebSocket('ws://127.0.0.1:8000/chat');
+  socket.onopen = (event) => {
+    alert('conection');
+  };
+  socket.addEventListener('message', (event) => {
+    console.log(event.data);
+    const payload = JSON.parse(event.data);
+    const newMessage: MessageCardProps = {
+      id: payload.id,
+      userID: payload.user_id,
+      text: payload.text,
+      createdAt: payload.created_at,
+    };
+    setMessages((prevMessages: MessageCardProps[]) => [
+      ...prevMessages,
+      newMessage,
+    ]);
+  });
+
+  return (
+    <Box
+      sx={{
+        marginTop: '60px',
+      }}
+    >
+      {messages.map((message, index) => (
+        <MessageCard
+          id={message.id}
+          userID={message.userID}
+          text={message.text}
+          createdAt={message.createdAt}
+        />
+      ))}
+    </Box>
+  );
+};
 
 export default Home;

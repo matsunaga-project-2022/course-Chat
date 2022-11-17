@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"encoding/json"
 	"github.com/labstack/echo/v4"
 	"github.com/matsunaga-project-2022/course/chat/internal/models"
 	"golang.org/x/net/websocket"
@@ -30,12 +29,12 @@ func (sh *SendHandler) Send(c echo.Context) error {
 			for {
 				// Client からのメッセージを読み込む
 				message := <-sh.messages
-				payload, err := json.Marshal(message)
-				if err != nil {
-					c.Logger().Error(err)
-				}
+				//payload, err := json.Marshal(message)
+				//if err != nil {
+				//	c.Logger().Error(err)
+				//}
 				// Client からのメッセージを元に返すメッセージを作成し送信する
-				err = websocket.JSON.Send(ws, payload)
+				err := websocket.JSON.Send(ws, message)
 				if err != nil {
 					c.Logger().Error(err)
 				}

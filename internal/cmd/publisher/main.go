@@ -11,8 +11,7 @@ import (
 
 func main() {
 	ctx := context.Background()
-	messages := make(chan models.Message, 1)
-	errors := make(chan error, 1)
+	clients := make(map[string]*models.Client, 0)
 
 	pubsub := redis.NewClient(&redis.Options{
 		Addr:     "localhost:6379",
@@ -22,10 +21,10 @@ func main() {
 
 	// running worker on background
 	messagePublisher := usecases.NewMessagePublisher(pubsub)
-	go messagePublisher.Publish(ctx, "chat", messages, errors)
+	go messagePublisher.Publish(ctx, "chat", clients)
 
 	e := echo.New()
-	sendHandler := controllers.NewSendHandler(messages, errors)
+	sendHandler := controllers.NewSendHandler(clients)
 	e.GET("/chat", sendHandler.Send)
 
 	e.Logger.Fatal(e.Start(":8000"))

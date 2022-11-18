@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/push.js/0.0.11/push.min.js"></script>
+    <script>
+      const socket = new WebSocket("ws://127.0.0.1:8000/chat");
+      socket.onopen = (event) => {
+        alert("conection");
+      };
+      socket.onmessage = (event) => {
+        console.log(event.data)
+        // Push.create('こんにちは！', {
+        //   body: event.data,
+        //   icon: 'https://i.pinimg.com/736x/a3/db/5e/a3db5ef1c47ea317575f976b12db7f58.jpg',
+        //   timeout: 5000,
+        //   onClick: function () {
+        //     this.close();
+        //   }
+        // });
+      }
+    </script>
+  </body>
+</html>

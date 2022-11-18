@@ -8,6 +8,7 @@ import {
   Typography,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
+// import colors from 'vuetify/lib/util/colors'
 
 export type HeaderProps = {
   onMenuButtonClicked: React.Dispatch<React.SetStateAction<boolean>>;
@@ -18,10 +19,10 @@ const Header = (props: HeaderProps) => {
   const { onMenuButtonClicked } = props;
   return (
     <AppBar
-      color="transparent"
       position="fixed"
       elevation={0}
       sx={{
+        backgroundColor: 'white',
         borderBottomStyle: 'solid',
         borderBottomColor: '#EDF2F7',
         borderBottomWidth: '1px',
@@ -47,7 +48,7 @@ const Header = (props: HeaderProps) => {
               fontSize: { xs: '15px', md: '20px' },
               fontWeight: 700,
               letterSpacing: '.3rem',
-              color: 'inherit',
+              color: 'black',
               textDecoration: 'none',
             }}
           >

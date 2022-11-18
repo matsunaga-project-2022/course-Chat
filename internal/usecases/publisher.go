@@ -26,19 +26,21 @@ func NewMessagePublisher(manager *redis.Client) *MessagePublisher {
 }
 
 // Publish is the method of MessagePublisher that subscribe message
-func (m *MessagePublisher) Publish(ctx context.Context, subID string, messages chan<- models.Message, errors chan<- error) {
+func (m *MessagePublisher) Publish(ctx context.Context, subID string, clients map[string]*models.Client) {
 	subscribe := m.manager.Subscribe(ctx, subID)
 
 	ch := subscribe.Channel()
 	for subscription := range ch {
 		var message models.Message
 		if err := json.Unmarshal([]byte(subscription.Payload), &message); err != nil {
-			errors <- err
+			log.Println(err)
 		}
 
 		log.Println(message)
-		m.mutex.Lock()
-		messages <- message
-		m.mutex.Unlock()
+		for _, client := range clients {
+			m.mutex.Lock()
+			client.Messages <- message
+			m.mutex.Unlock()
+		}
 	}
 }

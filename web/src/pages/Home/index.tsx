@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Box } from '@mui/material';
-import { grey, red } from '@mui/material/colors';
 import { MessageCard, MessageCardProps } from '../../components/Card/index';
+import InputForm from '../../components/InputForm/index';
 
 const Home: React.FC = () => {
   const [messages, setMessages] = useState<Array<MessageCardProps>>([]);
@@ -38,6 +38,7 @@ const Home: React.FC = () => {
           createdAt={message.createdAt}
         />
       ))}
+      <InputForm />
     </Box>
   );
 };

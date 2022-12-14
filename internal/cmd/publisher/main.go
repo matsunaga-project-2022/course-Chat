@@ -7,6 +7,7 @@ import (
 	"github.com/matsunaga-project-2022/course/chat/internal/controllers"
 	"github.com/matsunaga-project-2022/course/chat/internal/models"
 	"github.com/matsunaga-project-2022/course/chat/internal/usecases"
+	"os"
 )
 
 func main() {
@@ -14,7 +15,7 @@ func main() {
 	clients := make(map[string]*models.Client, 0)
 
 	pubsub := redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379",
+		Addr:     os.Getenv("REDIS_URL"),
 		Password: "",
 		DB:       0,
 	})

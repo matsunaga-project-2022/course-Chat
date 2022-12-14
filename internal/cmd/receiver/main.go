@@ -7,11 +7,12 @@ import (
 	"github.com/matsunaga-project-2022/course/chat/internal/controllers"
 	"github.com/matsunaga-project-2022/course/chat/internal/usecases"
 	"net/http"
+	"os"
 )
 
 func main() {
 	pubsub := redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379",
+		Addr:     os.Getenv("REDIS_URL"),
 		Password: "",
 		DB:       0,
 	})

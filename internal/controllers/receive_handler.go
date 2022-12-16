@@ -19,11 +19,13 @@ func (rh *ReceiveHandler) Receive() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		userID := c.FormValue("user_id")
 		text := c.FormValue("text")
-		if userID == "" || text == "" {
+		avatarURL := c.FormValue("avatar_url")
+		messageType := c.FormValue("message_type")
+		if userID == "" || text == "" || avatarURL == "" || messageType == "" {
 			return c.NoContent(http.StatusBadRequest)
 		}
 
-		err := rh.receiver.Receive(c.Request().Context(), "", userID, text)
+		err := rh.receiver.Receive(c.Request().Context(), "", userID, text, avatarURL, messageType)
 
 		if err != nil {
 			log.Println(err)
